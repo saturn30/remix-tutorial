@@ -9,10 +9,10 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import { json, type LinksFunction } from "@remix-run/node";
+import { json, redirect, type LinksFunction } from "@remix-run/node";
 
 import appStylesHref from "./app.css";
-import { getContacts } from "./data";
+import { createEmptyContact, getContacts } from "./data";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: appStylesHref },
@@ -21,6 +21,11 @@ export const links: LinksFunction = () => [
 export const loader = async () => {
   const contacts = await getContacts();
   return json({ contacts });
+};
+
+export const action = async () => {
+  const contact = await createEmptyContact();
+  return redirect(`/contacts/${contact.id}/edit`);
 };
 
 export default function App() {
